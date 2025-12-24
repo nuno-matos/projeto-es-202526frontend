@@ -1,11 +1,13 @@
-import './App.css'
+import LoginForm from "./components/loginLayout/LoginForm"
 
 function App() {
 
   return (
-    <div className="App">
-      
-    </div>
+      <main>
+        <section class="vh-100">
+          <LoginForm />
+        </section>
+      </main>
   )
 }
 
