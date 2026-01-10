@@ -21,10 +21,14 @@ function LoginForm() {
                 { email, password },
                 { headers: { 'Content-Type': 'application/json' } }
             )
-            console.log(response.data.token)
-
-            // Navigate to /home on success
-            navigate('/home')
+            console.log("Token: " + response.data.token)
+            if (response.data.token) {
+                //Save the token in localStorage
+                localStorage.setItem('token', response.data.token);
+                console.log('Token saved:', response.data.token);
+                // Navigate to /home on success
+                navigate('/home')
+            } 
         } catch (error) {
             console.error(error.response?.data || error.message)
         }
