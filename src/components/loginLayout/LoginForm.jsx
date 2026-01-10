@@ -17,7 +17,7 @@ function LoginForm() {
 
         try {
             const response = await axios.post(
-                baseURL + 'authenticate/login',
+                baseURL + 'auth/login',
                 { email, password },
                 { headers: { 'Content-Type': 'application/json' } }
             )
