@@ -1,4 +1,6 @@
 import './HomePageLayout.css'
+import TeacherDashboard from "../dashboard/TeacherDashboard.jsx";
+import StudentDashboard from "../dashboard/StudentDashboard.jsx";
 
 function decodeJWT(token) {
   try {
@@ -15,16 +17,33 @@ function HomeLayout() {
     const token = localStorage.getItem("token");
     const decoded = token ? decodeJWT(token) : null;
     const role = decoded?.role;
+
+    // teste das dashboards -> "TEACHER" ou "STUDENT"
+    // const role = "TEACHER";
+    // const role = "STUDENT";
     console.log("ROLE: " + role)
     return (
-    <>
-        <div>
-            <h1 id='titleofpage'>Hello Home</h1>
-            {role === "TEACHER" && <p>This user is a teacher</p>}
-            {role === "STUDENT" && <p>This user is a student</p>}
-            {!role && <p>User role not available</p>}
-        </div>
-    </>
+        <>
+            <div className="container-fluid p-0">
+                <nav className="navbar navbar-dark bg-dark mb-4 px-4">
+                    <span className="navbar-brand mb-0 h1">Exercise Manager</span>
+                    <button className="btn btn-outline-light btn-sm" onClick={() => {
+                        localStorage.removeItem("token");
+                        window.location.href = "/";
+                    }}>Logout</button>
+                </nav>
+
+                {role === "TEACHER" && <TeacherDashboard />}
+                {role === "STUDENT" && <StudentDashboard />}
+
+                {!role && (
+                    <div className="container text-center mt-5">
+                        <h3>Bem-vindo!</h3>
+                        <p>Por favor faz login para acederes ao painel.</p>
+                    </div>
+                )}
+            </div>
+        </>
     )
 }
 
