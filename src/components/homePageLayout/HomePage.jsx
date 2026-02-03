@@ -1,4 +1,4 @@
-import './HomePageLayout.css'
+import './HomePage.css'
 import TeacherDashboard from "../dashboard/TeacherDashboard.jsx";
 import StudentDashboard from "../dashboard/StudentDashboard.jsx";
 
@@ -17,11 +17,15 @@ function HomeLayout() {
     const token = localStorage.getItem("token");
     const decoded = token ? decodeJWT(token) : null;
     const role = decoded?.role;
+    //const email = decoded?.email
 
     // teste das dashboards -> "TEACHER" ou "STUDENT"
     // const role = "TEACHER";
     // const role = "STUDENT";
+
     console.log("ROLE: " + role)
+    //console.log("EMAIL: " + email)
+
     return (
         <>
             <div className="container-fluid p-0">
