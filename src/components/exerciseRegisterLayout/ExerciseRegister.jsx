@@ -1,8 +1,10 @@
 import './ExerciseRegister.css'
 import { useState } from "react";
 import axios from 'axios'
+import { useParams } from 'react-router-dom';
 
 function ExerciseRegister() {
+  const { courseUnitName } = useParams();
   const [exerciseTitle, setExerciseTitle] = useState("");
   const [groups, setGroups] = useState([]);
   const [savedGroups, setSavedGroups] = useState([]);
@@ -73,48 +75,48 @@ function ExerciseRegister() {
 
   /* ---------- SUBMIT ---------- */
 
-const handleSubmitExercise = async () => {
-  const token = localStorage.getItem("token");
+  const handleSubmitExercise = async () => {
+    const token = localStorage.getItem("token");
 
-  // flatten groups into questions[]
-  const questions = savedGroups.flatMap(group =>
-    group.questions.map(q => ({
-      questionText: q.text,   // matches QuestionDTO
-      group: group.name
-    }))
-  );
-
-  const payload = {
-    exerciseTitle: exerciseTitle, // matches ExerciseRegisterDTO
-    questions
-  };
-
-  try {
-    const response = await axios.post(
-      "http://localhost:8080/api/exercise/register",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      }
+    // flatten groups into questions[]
+    const questions = savedGroups.flatMap(group =>
+        group.questions.map(q => ({
+          questionText: q.text,
+          group: group.name
+        }))
     );
 
-    console.log("Exercise saved:", response.data);
-    alert("Exercise saved successfully!");
+    const payload = {
+      exerciseTitle: exerciseTitle,
+      courseUnitName: decodeURIComponent(courseUnitName),
+      questions
+    };
 
-    // optional reset
-    setExerciseTitle("");
-    setGroups([]);
-    setSavedGroups([]);
-    setConfirmedGroupIds([]);
+    try {
+      const response = await axios.post(
+          "http://localhost:8080/api/exercise/register",
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+      );
 
-  } catch (error) {
-    console.error("Error saving exercise:", error);
-    alert("Failed to save exercise");
-  }
-};
+      console.log("Exercise saved:", response.data);
+      alert("Exercise saved successfully!");
+
+      setExerciseTitle("");
+      setGroups([]);
+      setSavedGroups([]);
+      setConfirmedGroupIds([]);
+
+    } catch (error) {
+      console.error("Error saving exercise:", error);
+      alert("Failed to save exercise");
+    }
+  };
 
   return (
     <div className="container">
